@@ -23,6 +23,8 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+word_t paddr_read(paddr_t addr, int len);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -80,6 +82,20 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_x(char *args) {
+  char *n = strtok(args, " ");
+  char *addr_o = strtok(NULL," ");
+  int len = 0;
+  paddr_t addr = 0;
+  sscanf(n, "%d", &len);
+  sscanf(addr_o, "%x", &addr);
+  for ( int i = 0 ; i < len ; i++) {
+    printf("%x\n",paddr_read(addr,4));
+    addr += 4;
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -92,6 +108,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute N instructions in a single step and then pause,default 1",cmd_si},
   { "info", "Display the information of registers or watchpoints", cmd_info},
+  { "x", "Usage: x N EXPR. Evaluate the expression EXPR, use the result as the stating memory address and output N consecutive 4byte values in hex format", cmd_x},
 
   /* TODO: Add more commands */
 
