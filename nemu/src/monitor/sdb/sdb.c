@@ -53,7 +53,7 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-static int cmd_si(char *args){
+static int cmd_si(char *args) {
   int step = 0;
   if(args == NULL){
     step = 1;
@@ -61,6 +61,20 @@ static int cmd_si(char *args){
     sscanf(args, "%d", &step);
   }
   cpu_exec(step);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL," ");
+  if ( arg == NULL ) {
+    printf("Invalid args: info r (registers) or info w (watchpoints)\n");
+  } else {
+    if ( strcmp(arg,"r") == 0) {
+      isa_reg_display();
+    } else if (strcmp(arg,"w") == 0) {
+      //sdb_watchpoint_display();
+    }
+  }
   return 0;
 }
 
@@ -75,6 +89,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute N instructions in a single step and then pause,default 1",cmd_si},
+  { "info", "Display the information of registers or watchpoints", cmd_info},
 
   /* TODO: Add more commands */
 
