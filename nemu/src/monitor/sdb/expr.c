@@ -25,7 +25,8 @@ enum {
   TK_NUM,
   TK_HEX,
   TK_REG,
-  //TK_DEREF,
+  TK_NEG,
+  TK_DEREF,
 
   /* TODO: Add more token types */
 
@@ -125,6 +126,16 @@ static bool make_token(char *e) {
         nr_token++;
         break;
       }
+    }
+
+    for(int j = 0; j <nr_token; j++) {
+      if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
+        tokens[j].type = TK_NEG;
+      }
+      if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
+        tokens[j].type = TK_DEREF;
+      }
+
     }
 
     if (i == NR_REGEX) {
