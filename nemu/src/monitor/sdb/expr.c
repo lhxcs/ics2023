@@ -136,19 +136,73 @@ static bool make_token(char *e) {
   return true;
 }
 
-bool check_parentheses(int p, int q) {
-    int i, cnt = 0;
-    for (i = p; i <= q; i++) {
-        if (tokens[i].type == '(') {
-        cnt++;
-        } else if (tokens[i].type == ')') {
-        cnt--;
-        }
-        if (cnt < 0) {
+bool check_parentheses( int p, int q ) {
+  if (tokens[p].type != '(' || tokens[q].type != ')')
+    return false;
+  int i, cnt = 0;
+  for (i = p; i <= q; i++) {
+      if (tokens[i].type == '(') {
+      cnt++;
+      } else if (tokens[i].type == ')') {
+      cnt--;
+      }
+      if (cnt == 0 && i < q) {
+      return false;
+      }
+      if (cnt < 0) {
         return false;
-        }
-    }
+      }
+  }
     return cnt == 0;
+}
+
+
+int get_op( int p, int q ) {
+  int par_cnt = 0;
+  int op = -1;
+  int lowest_pre = 10;
+  for( int i = p; i <= q; i++) {
+    if(tokens[i].type == '(') {
+      par_cnt++;
+      continue;
+    } else if (tokens[i].type == ')') {
+      par_cnt--;
+      continue;
+    } else if (par_cnt == 0 && (tokens[i].type == '+' || tokens[i].type == '-')) {
+      if(lowest_pre >= 1) {
+        lowest_pre = 1;
+        op = i;
+      }
+    } else if (par_cnt == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
+      if(lowest_pre >= 2) {
+        lowest_pre = 2;
+        op = i;
+      }
+    }
+  }
+  assert (op != -1);
+  return op;
+}
+word_t eval( int p, int q ) {
+  if (p > q) {
+    printf("Bad expression\n");
+    assert(0);
+  } else if (p == q) {
+    return atoi(tokens[p].str);
+  } else if (check_parentheses(p,q)) {
+    return eval(p + 1, q - 1);
+  } else {
+    int op = get_op(p,q); //todo
+    word_t val1 = eval(p, op - 1);
+    word_t val2 = eval(op + 1, q);
+    switch (tokens[op].type) {
+      case '+' : return val1 + val2;
+      case '-' : return val1 - val2;
+      case '*' : return val1 * val2;
+      case '/' : return val1 / val2;
+      default: assert(0);
+    }
+  }
 }
 
 
@@ -161,5 +215,4 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
 
-  return 0;
 }
