@@ -22,7 +22,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-  TK_DECIMAL,
+  TK_NUM,
   TK_HEX,
   TK_REG,
 
@@ -48,7 +48,7 @@ static struct rule {
   {"\\(", '('},
   {"\\)", ')'},
   {"0x[0-9A-Fa-f]+", TK_HEX}, //Hex integer
-  {"[0-9]+", TK_DECIMAL}, //Decimal integer
+  {"[0-9]+", TK_NUM}, //Decimal integer
   {"\\$[0-9a-z]+", TK_REG},
 
 };
@@ -108,7 +108,7 @@ static bool make_token(char *e) {
 
         tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          case TK_DECIMAL:
+          case TK_NUM:
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].str[substr_len] = '\0';
             break;
