@@ -201,7 +201,7 @@ word_t eval( int p, int q ) {
   } else if (check_parentheses(p,q)) {
     return eval(p + 1, q - 1);
   } else {
-    int op = get_op(p,q); //todo
+    int op = get_op(p,q); 
     word_t val1 = eval(p, op - 1);
     word_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
