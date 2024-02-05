@@ -25,6 +25,7 @@ enum {
   TK_NUM,
   TK_HEX,
   TK_REG,
+  //TK_DEREF,
 
   /* TODO: Add more token types */
 
@@ -121,7 +122,6 @@ static bool make_token(char *e) {
             tokens[nr_token].str[substr_len-1] = '\0';
             break;
         }
-        printf("%s\n", tokens[nr_token].str);
         nr_token++;
         break;
       }
@@ -134,6 +134,21 @@ static bool make_token(char *e) {
   }
 
   return true;
+}
+
+bool check_parentheses(int p, int q) {
+    int i, cnt = 0;
+    for (i = p; i <= q; i++) {
+        if (tokens[i].type == '(') {
+        cnt++;
+        } else if (tokens[i].type == ')') {
+        cnt--;
+        }
+        if (cnt < 0) {
+        return false;
+        }
+    }
+    return cnt == 0;
 }
 
 
