@@ -96,6 +96,15 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+  bool success;
+  word_t ans = expr(args, &success);
+  if(success) {
+    printf("%u\n", ans);
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -109,6 +118,7 @@ static struct {
   { "si", "Execute N instructions in a single step and then pause,default 1",cmd_si},
   { "info", "Display the information of registers or watchpoints", cmd_info},
   { "x", "Usage: x N EXPR. Evaluate the expression EXPR, use the result as the stating memory address and output N consecutive 4byte values in hex format", cmd_x},
+  { "p", "Usage: p EXPR. Calculate the value of EXPR(expression)", cmd_p},
 
   /* TODO: Add more commands */
 
