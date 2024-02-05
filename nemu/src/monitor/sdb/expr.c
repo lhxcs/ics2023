@@ -22,6 +22,9 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
+  TK_DECIMAL,
+  TK_HEX,
+  TK_REG,
 
   /* TODO: Add more token types */
 
@@ -39,6 +42,15 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"\\-", '-'},
+  {"\\*", '*'},
+  {"\\/", '/'},
+  {"\\(", '('},
+  {"\\)", ')'},
+  {"0x[0-9A-Fa-f]+", TK_HEX}, //Hex integer
+  {"[0-9]+", TK_DECIMAL}, //Decimal integer
+  {"\\$[0-9a-z]+", TK_REG},
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -94,10 +106,22 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
+        tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_DECIMAL:
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+            break;
+          case TK_HEX:
+            strncpy(tokens[nr_token].str, substr_start+2, substr_len-2);
+            tokens[nr_token].str[substr_len-2] = '\0';
+            break;
+          case TK_REG:
+            strncpy(tokens[nr_token].str, substr_start+1, substr_len-1);
+            tokens[nr_token].str[substr_len-1] = '\0';
+            break;
         }
-
+        nr_token++;
         break;
       }
     }
