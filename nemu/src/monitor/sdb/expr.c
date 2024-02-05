@@ -180,7 +180,6 @@ int get_op( int p, int q ) {
       }
     }
   }
-  assert (op != -1);
   return op;
 }
 word_t eval( int p, int q ) {
@@ -213,6 +212,6 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  return (unsigned int) eval (0,nr_token - 1);
 
 }
