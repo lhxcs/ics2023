@@ -238,6 +238,7 @@ word_t eval( int p, int q ) {
         bool *success = &tmp;
         return isa_reg_str2val(tokens[p+1].str, success);
       } else if(tokens[p].type == TK_NEG) {
+        printf("We are dealing with negative numbers, whose negative.\n");
         return -eval(p + 1,q);
       } 
     }
