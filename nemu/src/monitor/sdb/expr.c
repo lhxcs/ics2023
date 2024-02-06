@@ -110,26 +110,29 @@ static bool make_token(char *e) {
 
         //tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          
           case TK_NUM:
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].str[substr_len] = '\0';
             break;
           case TK_HEX:
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start+2, substr_len-2);
             tokens[nr_token].str[substr_len-2] = '\0';
             break;
           case TK_REG:
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start+1, substr_len-1);
             tokens[nr_token].str[substr_len-1] = '\0';
             break;
           default:
             tokens[nr_token].type = rules[i].token_type;
             //printf("%d %s\n",tokens[nr_token].type,tokens[nr_token].str);
-            nr_token++;
+            //nr_token++;
         }
         break;
       }
+      nr_token++;
     }
 
     for(int j = 0; j < nr_token; j++) {
