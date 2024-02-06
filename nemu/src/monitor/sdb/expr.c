@@ -127,10 +127,11 @@ static bool make_token(char *e) {
           default:
             tokens[nr_token].type = rules[i].token_type;
             printf("%d %s\n",tokens[nr_token].type,tokens[nr_token].str);
-            nr_token++;
+            //nr_token++;
         }
         break;
       }
+      nr_token++;
     }
 
     for(int j = 0; j < nr_token; j++) {
