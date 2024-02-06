@@ -21,7 +21,9 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, 
+  TK_EQ, TK_NEQ, TK_GT, TK_LT, TK_LE, TK_GE,
+  TK_AND,TK_OR,
   TK_NUM,
   TK_HEX,
   TK_REG,
@@ -43,12 +45,19 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  {"==", TK_EQ}, 
+  {"!-",TK_NEQ},       // equal
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
   {"\\(", '('},
   {"\\)", ')'},
+  {"<",TK_LT},
+  {">",TK_GT},
+  {"<=",TK_LE},
+  {">=",TK_GE},
+  {"&&",TK_AND},
+  {"\\|\\|",TK_OR},
   {"0x[0-9A-Fa-f]+", TK_HEX}, //Hex integer
   {"[0-9]+", TK_NUM}, //Decimal integer
   {"\\$[0-9a-z]+", TK_REG},
@@ -107,28 +116,23 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
-        //tokens[nr_token].type = rules[i].token_type;
+        if(rules[i].token_type == TK_NOTYPE) {
+          break;
+        }
+        tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          case TK_NOTYPE:
-            break;
           case TK_NUM:
-            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].str[substr_len] = '\0';
             break;
           case TK_HEX:
-            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start+2, substr_len-2);
             tokens[nr_token].str[substr_len-2] = '\0';
             break;
           case TK_REG:
-            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start+1, substr_len-1);
             tokens[nr_token].str[substr_len-1] = '\0';
             break;
-          default:
-            tokens[nr_token].type = rules[i].token_type;
         }
         nr_token++;
         break;
@@ -142,7 +146,6 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
   return true;
 }
 
