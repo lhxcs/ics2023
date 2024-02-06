@@ -108,7 +108,7 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        tokens[nr_token].type = rules[i].token_type;
+        //tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
           case TK_NUM:
             strncpy(tokens[nr_token].str, substr_start, substr_len);
@@ -122,6 +122,10 @@ static bool make_token(char *e) {
             strncpy(tokens[nr_token].str, substr_start+1, substr_len-1);
             tokens[nr_token].str[substr_len-1] = '\0';
             break;
+          case TK_NOTYPE:
+            break;
+          default:
+            tokens[nr_token].type = rules[i].token_type;
         }
         nr_token++;
         break;
