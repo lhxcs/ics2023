@@ -46,7 +46,7 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ}, 
-  {"!-",TK_NEQ},       // equal
+  {"!=",TK_NEQ},       // equal
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
@@ -219,7 +219,7 @@ word_t eval( int p, int q ) {
         bool *success = &tmp;
         return isa_reg_str2val(tokens[p+1].str, success);
       } else if(tokens[p].type == TK_NEG) {
-        return -1*eval(p + 1,q);
+        return -eval(p + 1,q);
       }
     }
     word_t val1 = eval(p, op - 1);
@@ -229,6 +229,10 @@ word_t eval( int p, int q ) {
       case '-' : return val1 - val2;
       case '*' : return val1 * val2;
       case '/' : return val1 / val2;
+      case TK_EQ : return val1 == val2;
+      case TK_NEQ : return val1 != val2;
+      case TK_AND : return val1 && val2;
+      case TK_OR : return val1 || val2;
       default: 
         assert(0);
     }
