@@ -126,8 +126,8 @@ static bool make_token(char *e) {
             break;
           default:
             tokens[nr_token].type = rules[i].token_type;
+            nr_token++;
         }
-        nr_token++;
         break;
       }
     }
