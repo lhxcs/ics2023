@@ -203,7 +203,7 @@ word_t eval( int p, int q ) {
     if(tokens[p].type==TK_NUM)
       return atoi(tokens[p].str);
     else if(tokens[p].type == TK_HEX) {
-      word_t tmp = strtoul(tokens[p].str, NULL, 16);
+      word_t tmp = sscanf(tokens[p].str, "%x", &tmp);
       return tmp;
     } else assert(0);
   } else if (check_parentheses(p,q)) {
