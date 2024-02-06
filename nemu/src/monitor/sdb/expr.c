@@ -191,6 +191,21 @@ int get_op( int p, int q ) {
         lowest_pre = 2;
         op = i;
       }
+    }else if (par_cnt == 0 && (tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ)) {
+      if(lowest_pre >= 3) {
+        lowest_pre = 3;
+        op = i;
+      }
+    } else if (par_cnt == 0 && tokens[i].type == TK_AND) {
+      if(lowest_pre >= 4) {
+        lowest_pre = 4;
+        op = i;
+      }
+    } else if (par_cnt == 0 && tokens[i].type == TK_OR) {
+      if(lowest_pre >= 5) {
+        lowest_pre = 5;
+        op = i;
+      }
     }
   }
   return op;
@@ -222,10 +237,10 @@ word_t eval( int p, int q ) {
         return isa_reg_str2val(tokens[p+1].str, success);
       } else if(tokens[p].type == TK_NEG) {
         return -eval(p + 1,q);
-      }
+      } 
     }
     word_t val1 = eval(p, op - 1);
-    word_t val2 = eval(op + 1, q);
+    word_t val2 = (tokens[op].type=='+'||tokens[op].type=='-'||tokens[op].type=='*'||tokens[op].type=='/' )?eval(op + 1, q):eval(op + 2, q);
     switch (tokens[op].type) {
       case '+' : return val1 + val2;
       case '-' : return val1 - val2;
