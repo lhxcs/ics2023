@@ -19,7 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-
+extern word_t vaddr_read(vaddr_t addr, int len);
 enum {
   TK_NOTYPE = 256, 
   TK_EQ, TK_NEQ, TK_GT, TK_LT, TK_LE, TK_GE,
@@ -200,11 +200,28 @@ word_t eval( int p, int q ) {
     printf("Bad expression\n");
     assert(0);
   } else if (p == q) {
-    return atoi(tokens[p].str);
+    if(tokens[p].type==TK_NUM)
+      return atoi(tokens[p].str);
+    else if(tokens[p].type == TK_HEX) {
+      word_t tmp = strtoul(tokens[p].str, NULL, 16);
+      return tmp;
+    } else assert(0);
   } else if (check_parentheses(p,q)) {
     return eval(p + 1, q - 1);
   } else {
     int op = get_op(p,q); 
+    if(op == -1) {
+      if(tokens[p].type==TK_DEREF) {
+        int ans = vaddr_read(eval(p + 1,q),4);
+        return ans;
+      } else if (tokens[p].type == TK_REG) {
+        bool tmp = true;
+        bool *success = &tmp;
+        return isa_reg_str2val(tokens[p+1].str, success);
+      } else if(tokens[p].type == TK_NEG) {
+        return -eval(p + 1,q);
+      }
+    }
     word_t val1 = eval(p, op - 1);
     word_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
@@ -212,7 +229,8 @@ word_t eval( int p, int q ) {
       case '-' : return val1 - val2;
       case '*' : return val1 * val2;
       case '/' : return val1 / val2;
-      default: assert(0);
+      default: 
+        assert(0);
     }
   }
 }
