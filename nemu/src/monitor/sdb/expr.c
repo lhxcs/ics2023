@@ -126,13 +126,14 @@ static bool make_token(char *e) {
             break;
           default:
             tokens[nr_token].type = rules[i].token_type;
+            printf("%d %s\n",tokens[nr_token].type,tokens[nr_token].str);
             nr_token++;
         }
         break;
       }
     }
 
-    for(int j = 0; j <nr_token; j++) {
+    for(int j = 0; j < nr_token; j++) {
       if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
         tokens[j].type = TK_NEG;
       }
