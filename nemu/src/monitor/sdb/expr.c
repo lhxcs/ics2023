@@ -46,7 +46,7 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ}, 
-  {"!=",TK_NEQ},       // equal
+  {"!=",TK_NEQ},
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
@@ -211,6 +211,7 @@ word_t eval( int p, int q ) {
     return eval(p + 1, q - 1);
   } else {
     int op = get_op(p,q); 
+    printf("%d\n",op);
     if(op == -1) {
       if(tokens[p].type==TK_DEREF) {
         int ans = vaddr_read(eval(p + 1,q),4);
