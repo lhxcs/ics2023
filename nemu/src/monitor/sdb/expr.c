@@ -242,7 +242,7 @@ word_t eval( int p, int q ) {
       } 
     }
     word_t val1 = eval(p, op - 1);
-    word_t val2 = (tokens[op].type=='+'||tokens[op].type=='-'||tokens[op].type=='*'||tokens[op].type=='/' )?eval(op + 1, q):eval(op + 2, q);
+    word_t val2 = eval(op + 1, q);
     switch (tokens[op].type) {
       case '+' : return val1 + val2;
       case '-' : return val1 - val2;
