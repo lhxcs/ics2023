@@ -226,8 +226,8 @@ word_t eval( int p, int q ) {
     return eval(p + 1, q - 1);
   } else {
     int op = get_op(p,q); 
-    printf("%d\n",op);
-    printf("%d %d\n",tokens[op].type,TK_NEG);
+    //printf("%d\n",op);
+    //printf("%d %d\n",tokens[op].type,TK_NEG);
 
     if(op == -1) {
       if(tokens[p].type==TK_DEREF) {
@@ -238,7 +238,7 @@ word_t eval( int p, int q ) {
         bool *success = &tmp;
         return isa_reg_str2val(tokens[p+1].str, success);
       } else if(tokens[p].type == TK_NEG) {
-        printf("We are dealing with negative numbers, whose negative.\n");
+        //printf("We are dealing with negative numbers.\n");
         return eval(p + 1,q);
       } 
     }
