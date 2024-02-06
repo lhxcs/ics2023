@@ -110,8 +110,7 @@ static bool make_token(char *e) {
 
         //tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          case TK_NOTYPE:
-            break;
+          
           case TK_NUM:
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].str[substr_len] = '\0';
@@ -126,22 +125,21 @@ static bool make_token(char *e) {
             break;
           default:
             tokens[nr_token].type = rules[i].token_type;
-            printf("%d %s\n",tokens[nr_token].type,tokens[nr_token].str);
+            //printf("%d %s\n",tokens[nr_token].type,tokens[nr_token].str);
             nr_token++;
         }
         break;
       }
     }
 
-    // for(int j = 0; j < nr_token; j++) {
-    //   if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
-    //     tokens[j].type = TK_NEG;
-    //   }
-    //   if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
-    //     tokens[j].type = TK_DEREF;
-    //   }
-
-    // }
+    for(int j = 0; j < nr_token; j++) {
+      if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
+        tokens[j].type = TK_NEG;
+      }
+      if(tokens[j].type == '-' && ( (j == 0) || (tokens[j-1].type !=')' && tokens[j-1].type != TK_NUM && tokens[j-1].type != TK_HEX && tokens[j-1].type != TK_REG))) {
+        tokens[j].type = TK_DEREF;
+      }
+    }
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
