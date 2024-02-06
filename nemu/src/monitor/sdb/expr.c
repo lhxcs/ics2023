@@ -195,7 +195,7 @@ int get_op( int p, int q ) {
 }
 word_t eval( int p, int q ) {
   if (p > q) {
-    printf("Bad expression");
+    printf("Bad expression\n");
     assert(0);
   } else if (p == q) {
     return atoi(tokens[p].str);
