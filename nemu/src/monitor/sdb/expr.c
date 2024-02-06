@@ -227,7 +227,7 @@ word_t eval( int p, int q ) {
   } else {
     int op = get_op(p,q); 
     //printf("%d\n",op);
-    //printf("%d %d\n",tokens[op].type,TK_EQ);
+    //qprintf("%d %d\n",tokens[op].type,TK_EQ);
 
     if(op == -1) {
       if(tokens[p].type==TK_DEREF) {
