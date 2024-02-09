@@ -18,7 +18,7 @@
 #define NR_WP 32
 
 typedef struct watchpoint {
-  int NO;
+  int NO; //number of watchpoint
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
@@ -39,5 +39,33 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
+WP* new_wp() {
+  if (free_== NULL) {
+    assert(0);
+  }
+  WP* new = free_;
+  free_ = free_ -> next;
+  new -> next = head;
+  head = new;
+  return new;
+}
+
+void free_wp(WP *wp) {
+  WP *h = head;
+  if (h == wp) {
+    head = NULL;
+  } else {
+    while (h && h -> next != wp) {
+      h = h -> next;
+    }
+    if (h==NULL) {
+      printf("Delete Error: watchpoint not found\n");
+      assert(0);
+    }
+    h -> next = wp -> next;
+  }
+  wp -> next = free_;
+  free_ = wp;
+} 
 /* TODO: Implement the functionality of watchpoint */
 
