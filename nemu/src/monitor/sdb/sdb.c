@@ -23,6 +23,9 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void wp_watch();
+void wp_remove();
+void wp_list();
 word_t paddr_read(paddr_t addr, int len);
 
 
@@ -74,11 +77,38 @@ static int cmd_info(char *args) {
     if ( strcmp(arg,"r") == 0) {
       isa_reg_display();
     } else if (strcmp(arg,"w") == 0) {
-      //sdb_watchpoint_display();
+      wp_list();
     } else {
       printf("Invalid args : info r (registers) or info w (watchpoints)\n");
     }
   }
+  return 0;
+}
+
+static int cmd_w(char* args) {
+  if(!args) {
+    printf("Empty args: w EXPR\n");
+    return 0;
+  }
+  bool success;
+  word_t ans = expr(args,&success);
+  if(!success) {
+    puts("invalid expression");
+  } else {
+    wp_watch(args,ans);
+  }
+  return 0;
+  
+}
+
+static int cmd_d(char* args) {
+  char *arg = strtok(NULL, "");
+  if(arg == NULL) {
+    printf("Empty args: d N\n");
+    return 0;
+  }
+  int NO = strtol(arg, NULL, 10);
+  wp_remove(NO);
   return 0;
 }
 
@@ -119,6 +149,8 @@ static struct {
   { "info", "Display the information of registers or watchpoints", cmd_info},
   { "x", "Usage: x N EXPR. Evaluate the expression EXPR, use the result as the stating memory address and output N consecutive 4byte values in hex format", cmd_x},
   { "p", "Usage: p EXPR. Calculate the value of EXPR(expression)", cmd_p},
+  { "w", "Usage: w EXPR. When the value of the expression EXPR changes, pause program execution", cmd_w},
+  { "d", "Usage: d N. Delete watchpoint with index N", cmd_d},
 
   /* TODO: Add more commands */
 
