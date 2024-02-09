@@ -90,7 +90,7 @@ static int cmd_w(char* args) {
     printf("Empty args: w EXPR\n");
     return 0;
   }
-  bool success;
+  bool success = true; 
   word_t ans = expr(args,&success);
   if(!success) {
     puts("invalid expression");
