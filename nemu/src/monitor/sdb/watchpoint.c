@@ -81,7 +81,7 @@ void wp_remove(int no) {
   assert(no < NR_WP);
   WP* wp = &wp_pool[no];
   free_wp(wp);
-  printf("Delete watchpoint %d: %s\n",wp->NO, wp->expr);
+  //printf("Delete watchpoint %d: %s\n",wp->NO, wp->expr);
 }
 
 void wp_list() {
