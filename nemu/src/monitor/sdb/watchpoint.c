@@ -70,21 +70,21 @@ void free_wp(WP *wp) {
   free_ = wp;
 } 
 /* TODO: Implement the functionality of watchpoint */
-void wp_watch(char *expr, word_t res) {
+void wp_watch(char *expr, word_t ans) {
   WP* wp = new_wp();
   strcpy(wp->expr, expr);
-  wp->value = res;
+  wp->value = ans;
   printf("Watchpoint %d: %s\n",wp->NO, expr);
 }
 
-void wp_remove(int no) {
+void wp_delete(int no) {
   assert(no < NR_WP);
   WP* wp = &wp_pool[no];
   free_wp(wp);
   printf("Delete watchpoint %d: %s\n",wp->NO, wp->expr);
 }
 
-void wp_list() {
+void sdb_watchpoint_display() {
   WP* h = head;
   if(h == NULL) {
     printf("No watchpoints.\n");

@@ -24,8 +24,8 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 void wp_watch();
-void wp_remove();
-void wp_list();
+void wp_delete();
+void sdb_watchpoint_display();
 word_t paddr_read(paddr_t addr, int len);
 
 
@@ -77,7 +77,7 @@ static int cmd_info(char *args) {
     if ( strcmp(arg,"r") == 0) {
       isa_reg_display();
     } else if (strcmp(arg,"w") == 0) {
-      wp_list();
+      sdb_watchpoint_display();
     } else {
       printf("Invalid args : info r (registers) or info w (watchpoints)\n");
     }
@@ -108,7 +108,7 @@ static int cmd_d(char* args) {
     return 0;
   }
   int NO = strtol(arg, NULL, 10);
-  wp_remove(NO);
+  wp_delete(NO);
   return 0;
 }
 
